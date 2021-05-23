@@ -1,0 +1,29 @@
+.app {
+    background-color: #4039dc;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.bg-custom {
+    background-color: #f3f3f4;
+}
+
+.btn-custom {
+    background-color: #4039dc;
+    color: #ffffff;
+}
+
+.btn-custom:hover {
+    color: #ffffff;
+    background-color: #2f26d9;
+}
+
+.text-purple {
+    color: #4039dc;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
