@@ -22,11 +22,11 @@ class UserCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'           => 'required|string|max:255',
-            'email'          => 'required|email',
-            'password'       => 'required',
+            'name'           => 'required|string|min:3|max:255',
+            'email'          => 'required|email|min:3|max:255',
+            'password'       => 'required|confirmed|min:8',
             'cpf_cnpj'       => 'required|cpf_cnpj',
-            'user_type_enum' => 'required|integer',
+            'user_type_enum' => 'required|integer|in:1,2',
         ];
     }
 
@@ -40,10 +40,13 @@ class UserCreateRequest extends FormRequest
             'email.required'          => 'E-mail é obrigatório',
             'email.email'             => 'Informe um e-mail válido',
             'password'                => 'Senha é obrigatório',
+            'password.min'            => 'Senha precisa ter no mínimo 8 dígitos',
+            'password.confirmed'      => 'Senhas não conferem',
             'cpf_cnpj.required'       => 'CPF/CNPJ é obrigatório',
             'cpf_cnpj.cpf_cnpj'       => 'Informe um CPF/CNPJ válido',
             'user_type_enum.required' => 'Tipo de usuário é obrigatório',
             'user_type_enum.integer'  => 'Tipo de usuário precisa ser um inteiro',
+            'user_type_enum.in'       => 'Tipo de usuário inválido',
         ];
     }
 }

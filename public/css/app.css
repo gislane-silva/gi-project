@@ -1,13 +1,29 @@
 .app {
-    background-color: #4039dc;
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
 }
 
+.app-purple {
+    background-color: #4039dc;
+}
+
+.app-light {
+    background-color: #f3f3f4;
+}
+
 .bg-custom {
     background-color: #f3f3f4;
+}
+
+.bg-ilustration {
+    margin-right: 5%;
+    background-image: url("/img/ilustration.png");
+    background-size: cover;
+    background-position-x: 100%;
+    background-position-y: -5vh;
+    background-repeat: no-repeat;
 }
 
 .btn-custom {
@@ -20,10 +36,24 @@
     background-color: #2f26d9;
 }
 
+.btn-disabled, .btn-disabled:hover {
+    color: #ffffff !important;
+    background-color: #6c757d !important;
+    cursor: initial;
+}
+
 .text-purple {
     color: #4039dc;
 }
 
+.border-purple {
+    border: 1px solid #4039dc;
+}
+
 .form-group {
     margin-bottom: 0.5rem;
+}
+
+.wallet {
+    min-width: 450px;
 }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Mail\SendMailUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,12 +24,16 @@ Route::group([
                  'prefix' => 'users',
                  'as'     => '.users',
              ], function() {
-    Route::post('/', 'App\Http\Controllers\Users\UserController@store');
+    Route::post('/', 'App\Http\Controllers\Users\UserController@store')->name('store');
 });
 
 Route::group([
                  'prefix' => 'transactions',
                  'as'     => '.transactions',
              ], function() {
-    Route::post('/', 'App\Http\Controllers\Transactions\TransactionController@store');
+    Route::post('/', 'App\Http\Controllers\Transactions\TransactionController@store')->name('store');
+});
+
+Route::post('/sendEmail', function() {
+    Mail::to('gislanefabiano@gmail.com')->send(new SendMailUser());
 });

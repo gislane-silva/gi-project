@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', function () {
-    return view('login');
+Auth::routes();
+
+Route::get('/', function () {
+    return redirect()->route('login');
 });
 
-Route::get('/carteira', function () {
-    return view('wallet');
-});
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
