@@ -10,6 +10,24 @@ class TransactionService
     public function transactionIsAuthorized()
     {
         $url = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';
+        return $this->runApi($url);
+    }
+
+    /**
+     * @return bool
+     */
+    public function notify()
+    {
+        $url = 'http://o4d9z.mocklab.io/notify';
+        return $this->runApi($url);
+    }
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    protected function runApi(string $url)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, TRUE);

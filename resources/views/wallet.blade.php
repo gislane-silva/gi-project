@@ -64,65 +64,71 @@
 
 @section('scripts')
   <script>
-      $('#value').mask('000.000.000.000.000,00', {reverse: true});
-      $('#addTransfer').on('click', function() {
-          let toggle = $(this).data('toggle');
-          if (toggle === 'off') {
-              $('#contentTransfer').slideDown('slow');
-              $(this).data('toggle', 'on');
-              $(this).text('CANCELAR');
-          } else {
-              $('#contentTransfer').slideUp('slow');
-              $(this).data('toggle', 'off');
-              $(this).text('TRANSFERIR');
-          }
+
+      $(document).ready(function () {
+          $('#value').mask('000.000.000.000.000,00', {reverse: true});
+          $('#addTransfer').on('click', function() {
+              let toggle = $(this).data('toggle');
+              if (toggle === 'off') {
+                  $('#contentTransfer').slideDown('slow');
+                  $(this).data('toggle', 'on');
+                  $(this).text('CANCELAR');
+              } else {
+                  $('#contentTransfer').slideUp('slow');
+                  $(this).data('toggle', 'off');
+                  $(this).text('TRANSFERIR');
+              }
+          });
+
+          $('#formTransfer').on('submit', function (e) {
+              e.preventDefault();
+              $('#btnSend').addClass('btn-disabled').removeClass('btn-custom').prop('disabled', true);
+              let payerId = parseInt($(this).find('input[name="payer"]').val());
+              let payeeId = parseInt($(this).find('select[name="payee"]').val());
+              let transferAmount = parseFloat($(this).find('input[name="value"]').val().replaceAll(',', '.'));
+              let totalBalance = parseFloat($('#textBalance').data('value'));
+              let result = parseFloat(totalBalance - transferAmount);
+              let resultFormatted = result.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+
+              if (result < 0) {
+                  toastr['error']('Saldo insuficiente');
+              } else {
+                  let url = $(this).attr('action');
+
+                  $.ajax({
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      },
+                      async: false,
+                      method: "POST",
+                      url: url,
+                      data: {
+                          payer: payerId,
+                          payee: payeeId,
+                          value: transferAmount,
+                      },
+                  }).done(function(data) {
+                      let textBalance = $('#textBalance');
+                      textBalance.attr('data-value', result);
+                      textBalance.text(resultFormatted);
+                      toastr['success'](data.message);
+                  }).fail(function(data) {
+                      if (typeof data.responseJSON.errors !== 'undefined') {
+                          $.each(data.responseJSON.errors, function(key, value) {
+                              toastr['error'](value);
+                          });
+                      } else {
+                          toastr['error'](data.responseJSON.message);
+                      }
+                  }).always(function () {
+                      $('#btnSend').removeClass('btn-disabled').addClass('btn-custom').prop('disabled', false);
+                      let form = $('#formTransfer');
+                      form.find('select[name="payee"]').val('');
+                      form.find('input[name="value"]').val('');
+                      $('#addTransfer').trigger('click');
+                  });
+              }
+          });
       });
-
-      $('#formTransfer').on('submit', function (e) {
-          e.preventDefault();
-          $('#btnSend').addClass('btn-disabled').prop('disabled', true);
-          let payerId = parseInt($(this).find('input[name="payer"]').val());
-          let payeeId = parseInt($(this).find('select[name="payee"]').val());
-          let transferAmount = parseFloat($(this).find('input[name="value"]').val());
-          let totalBalance = parseFloat($('#textBalance').data('value'));
-          let result = parseFloat(totalBalance - transferAmount);
-          let resultFormatted = result.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-
-          if (result < 0) {
-              toastr['error']('Saldo insuficiente');
-          } else {
-              let url = $(this).attr('action');
-
-              $.ajax({
-                  headers: {
-                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                  },
-                  async: false,
-                  method: "POST",
-                  url: url,
-                  data: {
-                      payer: payerId,
-                      payee: payeeId,
-                      value: transferAmount,
-                  },
-              }).done(function(data) {
-                  let textBalance = $('#textBalance');
-                  textBalance.attr('data-value', result);
-                  textBalance.text(resultFormatted);
-                  toastr['success'](data.message);
-              }).fail(function(data) {
-                  if (typeof data.responseJSON.errors !== 'undefined') {
-                      $.each(data.responseJSON.errors, function(key, value) {
-                          toastr['error'](value);
-                      });
-                  } else {
-                      toastr['error'](data.responseJSON.message);
-                  }
-              }).always(function () {
-                  $('#btnSend').removeClass('btn-disabled').prop('disabled', false);
-              });
-          }
-      });
-
   </script>
 @endsection

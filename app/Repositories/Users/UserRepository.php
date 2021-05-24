@@ -97,4 +97,34 @@ class UserRepository
 
         return false;
     }
+
+    /**
+     * @param $id
+     * @return false|mixed
+     */
+    public function getNameById($id)
+    {
+        $userName = $this->user->query()->where('id', $id)->value('name');
+
+        if ($userName) {
+            return $userName;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $id
+     * @return false|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
+    public function find($id)
+    {
+        $user = $this->user->query()->find($id);
+
+        if ($user) {
+            return $user;
+        }
+
+        return false;
+    }
 }

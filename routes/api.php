@@ -35,5 +35,12 @@ Route::group([
 });
 
 Route::post('/sendEmail', function() {
-    Mail::to('gislanefabiano@gmail.com')->send(new SendMailUser());
+    $data           = (object) [
+        'payerName' => 'Pagador',
+        'payeeName' => 'Recebedor',
+        'value'     => 10.00,
+    ];
+
+    Mail::to('gislanefabiano@gmail.com')->send(new SendMailUser($data));
+
 });

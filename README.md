@@ -73,7 +73,7 @@ Retornos serão feitos em JSON.
 
 ## Pontos de melhoria
 - Implementação de testes unitários
-- Salvar notificação que não conseguiu ser enviada para retentar mais tarde
+- Salvar notificação que não conseguiu ser enviada pelo envio de notificação e de e-mail
 
 ## License
 
